@@ -10,3 +10,5 @@
 // Tylko deklaracja funkcji, któr¹ zawo³asz w main.cpp
 std::string test();
 
+template<typename T>
+void launchCudaBubbleSort(T* d_arr, int n);
