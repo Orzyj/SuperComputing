@@ -361,3 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/SuperComputing/wyniki_sortowania_bubble.csv
+/SuperComputing/wykres_wydajnosci.png
