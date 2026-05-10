@@ -11,4 +11,4 @@
 std::string test();
 
 template<typename T>
-void launchCudaBubbleSort(T* d_arr, int n);
+void launchCudaBubbleSort(T* d_arr, int n, double& time);

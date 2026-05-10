@@ -79,8 +79,6 @@ void BubbleSortManager::sortParallel(std::vector<T>& arr, double& time)
     if (numThreads == 0) numThreads = 2;
     if (numThreads > n / 2) numThreads = n / 2;
 
-    auto start = std::chrono::high_resolution_clock::now();
-
     std::barrier sync_point(numThreads);
 
     auto worker = [&](int thread_id) {
@@ -108,12 +106,14 @@ void BubbleSortManager::sortParallel(std::vector<T>& arr, double& time)
             }
             sync_point.arrive_and_wait();
         }
-        };
+    };
 
     std::vector<std::thread> threads;
     for (unsigned int i = 0; i < numThreads; ++i) {
         threads.emplace_back(worker, i);
     }
+
+    auto start = std::chrono::high_resolution_clock::now();
 
     for (auto& th : threads) {
         th.join();
@@ -133,20 +133,14 @@ void BubbleSortManager::cudaSort(std::vector<T>& arr, double& time)
         return;
     }
 
-    auto start = std::chrono::high_resolution_clock::now();
-
     T* d_arr = nullptr;
     size_t sizeInBytes = n * sizeof(T);
 
     cudaMalloc((void**)&d_arr, sizeInBytes);
     cudaMemcpy(d_arr, arr.data(), sizeInBytes, cudaMemcpyHostToDevice);
-    launchCudaBubbleSort(d_arr, n);
+    launchCudaBubbleSort(d_arr, n, time);
     cudaMemcpy(arr.data(), d_arr, sizeInBytes, cudaMemcpyDeviceToHost);
     cudaFree(d_arr);
-
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double, std::milli> duration = end - start;
-    time = duration.count();
 }
 
 template void BubbleSortManager::sort<int>(std::vector<int>&, double&);

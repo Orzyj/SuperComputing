@@ -28,17 +28,21 @@ std::string test() {
 }
 
 template<typename T>
-void launchCudaBubbleSort(T* d_arr, int n) {
+void launchCudaBubbleSort(T* d_arr, int n, double& time) {
     int threadsPerBlock = 512;
     int blocksPerGrid = ((n / 2) + threadsPerBlock - 1) / threadsPerBlock;
     if (blocksPerGrid == 0) blocksPerGrid = 1;
 
+    auto start = std::chrono::high_resolution_clock::now();
     for (int phase = 0; phase < n; ++phase) {
         genericBubbleSortStep<T> << <blocksPerGrid, threadsPerBlock >> > (d_arr, n, phase % 2);
 
         cudaDeviceSynchronize();
     }
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double, std::milli> duration = end - start;
+    time = duration.count();
 }
 
-template void launchCudaBubbleSort<int>(int* d_arr, int n);
-template void launchCudaBubbleSort<float>(float* d_arr, int n);
+template void launchCudaBubbleSort<int>(int* d_arr, int n, double& time);
+template void launchCudaBubbleSort<float>(float* d_arr, int n, double& time);
