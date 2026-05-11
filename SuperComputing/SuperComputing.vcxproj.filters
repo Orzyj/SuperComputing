@@ -49,6 +49,9 @@
     <ClCompile Include="BubbleSortManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MergeSortManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CudaCompile Include="cuda.cu">
@@ -59,12 +62,18 @@
     <None Include="cuda.cuh">
       <Filter>CUDA Files</Filter>
     </None>
-    <None Include="bubbleSortChartGenerator.py">
+    <None Include="SortChartGenerator.py">
       <Filter>ChartsMatPlotLib</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BubbleSortManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MergeSortManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Constants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

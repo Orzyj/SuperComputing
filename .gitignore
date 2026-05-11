@@ -361,5 +361,10 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# LOCAL FILES
 /SuperComputing/wyniki_sortowania_bubble.csv
 /SuperComputing/wykres_wydajnosci.png
+/SuperComputing/wykres_bubble.png
+/SuperComputing/wykres_merge.png
+/SuperComputing/wyniki_sortowania_merge.csv

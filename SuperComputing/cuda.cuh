@@ -7,8 +7,10 @@
 #include <cuda_runtime.h>
 #include <string>
 
-// Tylko deklaracja funkcji, któr¹ zawo³asz w main.cpp
 std::string test();
 
 template<typename T>
 void launchCudaBubbleSort(T* d_arr, int n, double& time);
+
+template<typename T>
+void launchCudaMergeSort(T* d_arr, int n, double& time);

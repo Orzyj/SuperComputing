@@ -1,30 +1,37 @@
-#include "SuperComputing.h"
-#include "cuda.cuh"
+
 #include <QFile>
 #include <QTextStream>
 #include <QCoreApplication>
 #include <QDebug> 
 #include <QProcess>
+#include <QWindowStateChangeEvent>
+
+#include "SuperComputing.h"
+#include "cuda.cuh"
+#include "Constants.h"
 
 SuperComputing::SuperComputing(QWidget* parent)
     : QMainWindow(parent)
 {
     ui.setupUi(this);
+    
     QObject::connect(ui.btnBubbleSort, &QPushButton::clicked, this, &SuperComputing::onBubbleSortButtonClicked);
+    QObject::connect(ui.btnMergeSort, &QPushButton::clicked, this, &SuperComputing::onMergeSortButtonClicked);
+	QObject::connect(ui.btnRefreshCharts, &QPushButton::clicked, this, &SuperComputing::onRefreshChartsButtonClicked);
 }
 
 SuperComputing::~SuperComputing()
 {
 }
 
-void SuperComputing::loadImage(const QString& imagePath)
+void SuperComputing::loadImage(const QString& imagePath, QFrame* frame)
 {
     if (QFile::exists(imagePath)) {
         QPixmap pixmap(imagePath);
 
-        QLayout* layout = ui.bubbleChart->layout();
+        QLayout* layout = frame->layout();
         if (!layout) {
-            layout = new QVBoxLayout(ui.bubbleChart);
+            layout = new QVBoxLayout(frame);
             layout->setContentsMargins(0, 0, 0, 0); 
         }
 
@@ -35,7 +42,7 @@ void SuperComputing::loadImage(const QString& imagePath)
         }
 
         QLabel* imageLabel = new QLabel(this);
-        imageLabel->setPixmap(pixmap.scaled(ui.bubbleChart->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        imageLabel->setPixmap(pixmap.scaled(frame->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
         imageLabel->setAlignment(Qt::AlignCenter);
         layout->addWidget(imageLabel);
 
@@ -141,11 +148,107 @@ void SuperComputing::sortFloatBubble(const int& elements, QTextStream& out)
     fillTable(ui.bubbleTableFloatOMP, arr_omp);
 }
 
+void SuperComputing::sortIntMerge(const int& elements, QTextStream& out)
+{
+    std::vector<int> original_arr(elements);
+    for (int i = 0; i < elements; ++i)
+        original_arr[i] = rand() % 1000;
+
+    double time_Seq_Int = 0.0, time_Multi_Int = 0.0, time_Cuda_Int = 0.0, time_omp = 0.0;
+
+    std::vector<int> arr_seq = original_arr;
+    m_mergeSortManager.sort(arr_seq, time_Seq_Int);
+    ui.lblIntSeqMerge->setText(QString::number(time_Seq_Int) + " ms");
+    QCoreApplication::processEvents();
+    ui.progressBar->setValue(15);
+    ui.lblStatusBar->setText("Zakonczono sortowanie sekwencyjne dla Integer");
+
+    std::vector<int> arr_multi = original_arr;
+    m_mergeSortManager.sortParallel(arr_multi, time_Multi_Int);
+    ui.lblIntMultiMerge->setText(QString::number(time_Multi_Int) + " ms");
+    QCoreApplication::processEvents();
+    ui.progressBar->setValue(30);
+    ui.lblStatusBar->setText("Zakonczono sortowanie wielow¹tkowe dla Integer");
+
+    std::vector<int> arr_cuda = original_arr;
+    m_mergeSortManager.cudaSort(arr_cuda, time_Cuda_Int);
+    ui.lblIntCUDAMerge->setText(QString::number(time_Cuda_Int) + " ms");
+    QCoreApplication::processEvents();
+    ui.progressBar->setValue(40);
+    ui.lblStatusBar->setText("Zakonczono sortowanie CUDA dla Integer");
+
+    std::vector<int> arr_omp = original_arr;
+    m_mergeSortManager.sortWithOpenMP(arr_omp, time_omp);
+    ui.lblIntOMPMerge->setText(QString::number(time_omp) + " ms");
+    QCoreApplication::processEvents();
+    ui.progressBar->setValue(55);
+    ui.lblStatusBar->setText("Zakonczono sortowanie OpenMP dla Integer");
+
+    out << elements << ",Integer,"
+        << QString::number(time_Seq_Int, 'f', 4) << ","
+        << QString::number(time_Multi_Int, 'f', 4) << ","
+        << QString::number(time_Cuda_Int, 'f', 4) << ","
+        << QString::number(time_omp, 'f', 4) << "\n";
+
+    fillTable(ui.mergeTableIntSeq, arr_seq);
+    fillTable(ui.mergeTableIntMulti, arr_multi);
+    fillTable(ui.mergeTableIntCUDA, arr_cuda);
+    fillTable(ui.mergeTableIntOMP, arr_omp);
+}
+
+void SuperComputing::sortFloatMerg(const int& elements, QTextStream& out)
+{
+    std::vector<float> original_arr(elements);
+    for (int i = 0; i < elements; ++i)
+        original_arr[i] = static_cast<float>(rand()) / RAND_MAX * 1000.0f;
+
+    double time_Seq_Float = 0.0, time_Multi_Float = 0.0, time_Cuda_Float = 0.0, time_omp = 0.0;
+
+    std::vector<float> arr_seq = original_arr;
+    m_mergeSortManager.sort(arr_seq, time_Seq_Float);
+    ui.lblFloatSeqMerge->setText(QString::number(time_Seq_Float) + " ms");
+    QCoreApplication::processEvents();
+    ui.progressBar->setValue(65);
+    ui.lblStatusBar->setText("Zakonczono sortowanie sekwencyjne dla Float");
+
+    std::vector<float> arr_multi = original_arr;
+    m_mergeSortManager.sortParallel(arr_multi, time_Multi_Float);
+    ui.lblFloatMultiMerge->setText(QString::number(time_Multi_Float) + " ms");
+    QCoreApplication::processEvents();
+    ui.progressBar->setValue(75);
+    ui.lblStatusBar->setText("Zakonczono sortowanie wielow¹tkowe dla Float");
+
+    std::vector<float> arr_cuda = original_arr;
+    m_mergeSortManager.cudaSort(arr_cuda, time_Cuda_Float);
+    ui.lblFloatCUDAMerge->setText(QString::number(time_Cuda_Float) + " ms");
+    QCoreApplication::processEvents();
+    ui.progressBar->setValue(85);
+    ui.lblStatusBar->setText("Zakonczono sortowanie CUDA dla Float");
+
+    std::vector<float> arr_omp = original_arr;
+    m_mergeSortManager.sortWithOpenMP(arr_omp, time_omp);
+    ui.lblFloatOMPMerge->setText(QString::number(time_omp) + " ms");
+    QCoreApplication::processEvents();
+    ui.progressBar->setValue(90);
+    ui.lblStatusBar->setText("Zakonczono sortowanie OpenMP dla Float");
+
+    out << elements << ",Float,"
+        << QString::number(time_Seq_Float, 'f', 4) << ","
+        << QString::number(time_Multi_Float, 'f', 4) << ","
+        << QString::number(time_Cuda_Float, 'f', 4) << ","
+        << QString::number(time_omp, 'f', 4) << "\n";
+
+    fillTable(ui.mergeTableFloatSeq, arr_seq);
+    fillTable(ui.mergeTableFloatMulti, arr_multi);
+    fillTable(ui.mergeTableFloatCUDA, arr_cuda);
+    fillTable(ui.mergeTableFloatOMP, arr_omp);
+}
+
 void SuperComputing::onBubbleSortButtonClicked() {
     int elements = ui.leElementsBubble->text().toInt();
 	ui.progressBar->setValue(0);
 
-    QFile csvFile("wyniki_sortowania_bubble.csv");
+    QFile csvFile(Config::Files::BUBBLE_SORT_CSV);
     bool isNewFile = !csvFile.exists(); 
 
     if (!csvFile.open(QIODevice::Append | QIODevice::Text)) {
@@ -174,18 +277,73 @@ void SuperComputing::onBubbleSortButtonClicked() {
 
 	QProcess* process = new QProcess(this);
     QStringList arguments;
-    arguments << "bubbleSortChartGenerator.py";
+    arguments << "SortChartGenerator.py"
+        << Config::Files::BUBBLE_SORT_CSV
+        << Config::Images::BUBBLE_CHART
+		<< Config::SortingAlgorithms::BUBBLE;
 
 	process->start("python", arguments);
     process->waitForFinished();
 
     ui.lblStatusBar->setText("Generuje wykres");
-    loadImage("wykres_wydajnosci.png");
+    loadImage(Config::Images::BUBBLE_CHART, ui.bubbleChart);
     ui.progressBar->setValue(100);
     ui.lblStatusBar->setText("Koniec - Kolejka pusta");
     
 }
 
+void SuperComputing::onMergeSortButtonClicked() {
+    int elements = ui.leElementsMergeSort->text().toInt();
+    ui.progressBar->setValue(0);
+
+    QFile csvFile(Config::Files::MERGE_SORT_CSV);
+    bool isNewFile = !csvFile.exists();
+
+    if (!csvFile.open(QIODevice::Append | QIODevice::Text)) {
+        qDebug() << "Nie udalo sie otworzyc pliku CSV do zapisu!";
+        return;
+    }
+
+    QTextStream out(&csvFile);
+
+    if (isNewFile) {
+        out << "Ilosc_elementow,Typ_danych,Sekwencyjnie(ms),Wielowatkowo(ms),CUDA(ms),OpenMP(ms)\n";
+    }
+
+    if (ui.chbIntMergeSort->isChecked()) {
+        sortIntMerge(elements, out);
+    }
+
+    if (ui.chkFloatMergeSort->isChecked()) {
+        sortFloatMerg(elements, out);
+    }
+
+    ui.progressBar->setValue(98);
+    ui.lblStatusBar->setText("Zakonczono sortowania");
+
+    csvFile.close();
+
+    QProcess* process = new QProcess(this);
+    QStringList arguments;
+    arguments << "SortChartGenerator.py"
+        << Config::Files::MERGE_SORT_CSV
+        << Config::Images::MERGE_CHART
+		<< Config::SortingAlgorithms::MERGE;
+
+    process->start("python", arguments);
+    process->waitForFinished();
+
+    ui.lblStatusBar->setText("Generuje wykres");
+    loadImage(Config::Images::MERGE_CHART, ui.mergeSortChart);
+    ui.progressBar->setValue(100);
+    ui.lblStatusBar->setText("Koniec - Kolejka pusta");
+}
+
+void SuperComputing::onRefreshChartsButtonClicked()
+{
+    loadImage(Config::Images::BUBBLE_CHART, ui.bubbleChart);
+    loadImage(Config::Images::MERGE_CHART, ui.mergeSortChart);
+}
 
 template<typename T>
 void SuperComputing::fillTable(QTableWidget* table, const std::vector<T>& data)
@@ -202,5 +360,21 @@ void SuperComputing::fillTable(QTableWidget* table, const std::vector<T>& data)
     for (int i = 0; i < rowsToShow; ++i) {
         table->setItem(i, 0, new QTableWidgetItem(QString::number(data[i])));
         table->item(i, 0)->setTextAlignment(Qt::AlignCenter);
+    }
+}
+
+void SuperComputing::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::WindowStateChange) {
+        QWindowStateChangeEvent* stateEvent = static_cast<QWindowStateChangeEvent*>(event);
+        if (this->isMaximized() && !(stateEvent->oldState() & Qt::WindowMaximized)) {
+            loadImage(Config::Images::BUBBLE_CHART, ui.bubbleChart);
+            loadImage(Config::Images::MERGE_CHART, ui.mergeSortChart);
+        }
+        else if (!this->isMaximized() && (stateEvent->oldState() & Qt::WindowMaximized)) {
+            loadImage(Config::Images::BUBBLE_CHART, ui.bubbleChart);
+            loadImage(Config::Images::MERGE_CHART, ui.mergeSortChart);
+        }
+        QMainWindow::changeEvent(event);
     }
 }

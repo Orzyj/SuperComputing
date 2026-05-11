@@ -1,10 +1,20 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import os
+import sys
 
-FILE_NAME = 'wyniki_sortowania_bubble.csv'
 
 def main():
+
+    FILE_NAME = 'wyniki_sortowania_bubble.csv'
+    OUTPUT_FILE = 'wykres_wydajnosci.png'
+    TYPE = ''
+
+    if len(sys.argv) > 1:
+        FILE_NAME = sys.argv[1]
+        OUTPUT_FILE = sys.argv[2] if len(sys.argv) > 2 else 'wykres_wydajnosci.png'
+        TYPE = sys.argv[3] if len(sys.argv) > 3 else ''
+
     if not os.path.exists(FILE_NAME):
         print(f"Błąd: Nie znaleziono pliku '{FILE_NAME}'.")
         return
@@ -30,7 +40,8 @@ def main():
 
     # 2. Przygotowanie okna z dwoma wykresami
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
-    fig.suptitle('Porównanie wydajności algorytmów Bubble Sort', fontsize=16)
+    TITLE: str = f"Porównanie wydajności algorytmów {TYPE}"
+    fig.suptitle(TITLE, fontsize=16)
 
     # --- Wykres 1: INTEGER ---
     if not df_int.empty:
@@ -62,7 +73,7 @@ def main():
 
     # 3. Rysowanie i zapis
     plt.tight_layout()
-    plt.savefig('wykres_wydajnosci.png', dpi=300)
+    plt.savefig(OUTPUT_FILE, dpi=300)
     print("Wykres zostal zapisany jako 'wykres_wydajnosci.png'")
 
 if __name__ == '__main__':

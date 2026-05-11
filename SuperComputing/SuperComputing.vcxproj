@@ -108,6 +108,7 @@
     <QtUic Include="SuperComputing.ui" />
     <QtMoc Include="SuperComputing.h" />
     <ClCompile Include="BubbleSortManager.cpp" />
+    <ClCompile Include="MergeSortManager.cpp" />
     <ClCompile Include="SuperComputing.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -115,11 +116,13 @@
     <CudaCompile Include="cuda.cu">
       <FileType>Document</FileType>
     </CudaCompile>
-    <None Include="bubbleSortChartGenerator.py" />
+    <None Include="SortChartGenerator.py" />
     <None Include="cuda.cuh" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BubbleSortManager.h" />
+    <ClInclude Include="Constants.h" />
+    <ClInclude Include="MergeSortManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
