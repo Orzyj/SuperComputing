@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1418</width>
-    <height>772</height>
+    <width>1231</width>
+    <height>753</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -39,7 +39,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -695,6 +695,329 @@
        <attribute name="title">
         <string>Quick Sort</string>
        </attribute>
+       <layout class="QGridLayout" name="gridLayout_18">
+        <item row="0" column="0" rowspan="2">
+         <widget class="QFrame" name="frame_14">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::Shape::Box</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Shadow::Raised</enum>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_39">
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_17">
+             <item>
+              <widget class="QLabel" name="label_62">
+               <property name="text">
+                <string>Wprowadź ilosć elementów:</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="leElementsQuickSort_4">
+               <property name="placeholderText">
+                <string>Liczba elementów losowych</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btnQuickSort">
+               <property name="text">
+                <string>Sortuj</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_18">
+             <item>
+              <widget class="QLabel" name="label_63">
+               <property name="text">
+                <string>Wybierz typ elementów:</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="chbIntQuickSort">
+               <property name="text">
+                <string>Integer</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="chkFloatQuickSort">
+               <property name="text">
+                <string>Float</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="0" column="1" rowspan="2">
+         <widget class="QFrame" name="frame_13">
+          <property name="minimumSize">
+           <size>
+            <width>421</width>
+            <height>128</height>
+           </size>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::Shape::Box</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Shadow::Raised</enum>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_16">
+           <item row="0" column="0">
+            <layout class="QGridLayout" name="gridLayout_17">
+             <item row="4" column="0">
+              <widget class="QLabel" name="label_61">
+               <property name="text">
+                <string>OMP</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="QLabel" name="lblFloatSeqQuick">
+               <property name="text">
+                <string>0 [s]</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QLabel" name="lblIntMultiQuick">
+               <property name="text">
+                <string>0 [s]</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_58">
+               <property name="text">
+                <string>Sekwencyjnie</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <widget class="QLabel" name="label_57">
+               <property name="text">
+                <string>Float</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="label_60">
+               <property name="text">
+                <string>CUDA</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="1">
+              <widget class="QLabel" name="lblIntOMPQuick">
+               <property name="text">
+                <string>0 [s]</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="QLabel" name="lblIntCUDAQuick">
+               <property name="text">
+                <string>0 [s]</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QLabel" name="lblIntSeqQuick">
+               <property name="text">
+                <string>0 [s]</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="2">
+              <widget class="QLabel" name="lblFloatCUDAQuick">
+               <property name="text">
+                <string>0 [s]</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="label_59">
+               <property name="text">
+                <string>Wielowątkowo</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="2">
+              <widget class="QLabel" name="lblFloatOMPQuick">
+               <property name="text">
+                <string>0 [s]</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="2">
+              <widget class="QLabel" name="lblFloatMultiQuick">
+               <property name="text">
+                <string>0 [s]</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLabel" name="label_56">
+               <property name="text">
+                <string>Integer</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QLabel" name="label_55">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Dane (pierwsze 100 z każdej iteracji)</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2" rowspan="2">
+         <widget class="QTabWidget" name="tabWidget_4">
+          <property name="maximumSize">
+           <size>
+            <width>333</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="currentIndex">
+           <number>3</number>
+          </property>
+          <widget class="QWidget" name="tab_34">
+           <attribute name="title">
+            <string>Sekencyjnie</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_35">
+            <item>
+             <widget class="QTableWidget" name="quickTableIntSeq"/>
+            </item>
+            <item>
+             <widget class="QTableWidget" name="quickTableFloatSeq"/>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tab_35">
+           <attribute name="title">
+            <string>Wielowątkowo</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_36">
+            <item>
+             <widget class="QTableWidget" name="quickTableIntMulti"/>
+            </item>
+            <item>
+             <widget class="QTableWidget" name="quickTableFloatMulti"/>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tab_36">
+           <attribute name="title">
+            <string>CUDA</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_37">
+            <item>
+             <widget class="QTableWidget" name="quickTableIntCUDA"/>
+            </item>
+            <item>
+             <widget class="QTableWidget" name="quickTableFloatCUDA"/>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tab_37">
+           <attribute name="title">
+            <string>OMP</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_38">
+            <item>
+             <widget class="QTableWidget" name="quickTableIntOMP"/>
+            </item>
+            <item>
+             <widget class="QTableWidget" name="quickTableFloatOMP"/>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+        <item row="2" column="0" colspan="2">
+         <widget class="QFrame" name="mergeQuickChart">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::Shape::Box</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Shadow::Raised</enum>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </widget>
     </item>
