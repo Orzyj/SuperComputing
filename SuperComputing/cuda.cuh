@@ -14,3 +14,6 @@ void launchCudaBubbleSort(T* d_arr, int n, double& time);
 
 template<typename T>
 void launchCudaMergeSort(T* d_arr, int n, double& time);
+
+template<typename T>
+void launchCudaQuickSort(T* d_arr, int n, double& time);

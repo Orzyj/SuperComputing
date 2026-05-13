@@ -5,6 +5,13 @@
 #include <QDebug> 
 #include <QProcess>
 #include <QWindowStateChangeEvent>
+#include <QMenuBar>
+#include <QMenu>
+#include <QAction>
+#include <QMessageBox>
+#include <QDesktopServices>
+#include <QUrl>
+#include <qstandardpaths.h>
 
 #include "SuperComputing.h"
 #include "cuda.cuh"
@@ -14,10 +21,15 @@ SuperComputing::SuperComputing(QWidget* parent)
     : QMainWindow(parent)
 {
     ui.setupUi(this);
+
+    QMenu* reportsMenu = menuBar()->addMenu("Raporty");
+    QAction* generateReportAction = reportsMenu->addAction("Generuj raport PDF");
     
+    QObject::connect(generateReportAction, &QAction::triggered, this, &SuperComputing::onGenerateReportButtonClicked);
     QObject::connect(ui.btnBubbleSort, &QPushButton::clicked, this, &SuperComputing::onBubbleSortButtonClicked);
     QObject::connect(ui.btnMergeSort, &QPushButton::clicked, this, &SuperComputing::onMergeSortButtonClicked);
-	QObject::connect(ui.btnRefreshCharts, &QPushButton::clicked, this, &SuperComputing::onRefreshChartsButtonClicked);
+    QObject::connect(ui.btnQuickSort, &QPushButton::clicked, this, &SuperComputing::onQuickSortButtonClicked);
+	QObject::connect(ui.btnRefreshCharts, &QPushButton::clicked, this, &SuperComputing::onRefreshChartsButtonClicked);   
 }
 
 SuperComputing::~SuperComputing()
@@ -244,6 +256,102 @@ void SuperComputing::sortFloatMerg(const int& elements, QTextStream& out)
     fillTable(ui.mergeTableFloatOMP, arr_omp);
 }
 
+void SuperComputing::sortIntQuick(const int& elements, QTextStream& out)
+{
+    std::vector<int> original_arr(elements);
+    for (int i = 0; i < elements; ++i)
+        original_arr[i] = rand() % 1000;
+
+    double time_Seq_Int = 0.0, time_Multi_Int = 0.0, time_Cuda_Int = 0.0, time_omp = 0.0;
+
+    std::vector<int> arr_seq = original_arr;
+    m_quickSortManager.sort(arr_seq, time_Seq_Int);
+    ui.lblIntSeqQuick->setText(QString::number(time_Seq_Int) + " ms");
+    QCoreApplication::processEvents();
+    ui.progressBar->setValue(15);
+    ui.lblStatusBar->setText("Zakonczono sortowanie sekwencyjne dla Integer");
+
+    std::vector<int> arr_multi = original_arr;
+    m_quickSortManager.sortParallel(arr_multi, time_Multi_Int);
+    ui.lblIntMultiQuick->setText(QString::number(time_Multi_Int) + " ms");
+    QCoreApplication::processEvents();
+    ui.progressBar->setValue(30);
+    ui.lblStatusBar->setText("Zakonczono sortowanie wielow¹tkowe dla Integer");
+
+    std::vector<int> arr_cuda = original_arr;
+    m_quickSortManager.cudaSort(arr_cuda, time_Cuda_Int);
+    ui.lblIntCUDAQuick->setText(QString::number(time_Cuda_Int) + " ms");
+    QCoreApplication::processEvents();
+    ui.progressBar->setValue(40);
+    ui.lblStatusBar->setText("Zakonczono sortowanie CUDA dla Integer");
+
+    std::vector<int> arr_omp = original_arr;
+    m_quickSortManager.sortWithOpenMP(arr_omp, time_omp);
+    ui.lblIntOMPQuick->setText(QString::number(time_omp) + " ms");
+    QCoreApplication::processEvents();
+    ui.progressBar->setValue(55);
+    ui.lblStatusBar->setText("Zakonczono sortowanie OpenMP dla Integer");
+
+    out << elements << ",Integer,"
+        << QString::number(time_Seq_Int, 'f', 4) << ","
+        << QString::number(time_Multi_Int, 'f', 4) << ","
+        << QString::number(time_Cuda_Int, 'f', 4) << ","
+        << QString::number(time_omp, 'f', 4) << "\n";
+
+    fillTable(ui.quickTableIntSeq, arr_seq);
+    fillTable(ui.quickTableIntMulti, arr_multi);
+    fillTable(ui.quickTableIntCUDA, arr_cuda);
+    fillTable(ui.quickTableIntOMP, arr_omp);
+}
+
+void SuperComputing::sortFloatQuick(const int& elements, QTextStream& out)
+{
+    std::vector<float> original_arr(elements);
+    for (int i = 0; i < elements; ++i)
+        original_arr[i] = static_cast<float>(rand()) / RAND_MAX * 1000.0f;
+
+    double time_Seq_Float = 0.0, time_Multi_Float = 0.0, time_Cuda_Float = 0.0, time_omp = 0.0;
+
+    std::vector<float> arr_seq = original_arr;
+    m_quickSortManager.sort(arr_seq, time_Seq_Float);
+    ui.lblFloatSeqQuick->setText(QString::number(time_Seq_Float) + " ms");
+    QCoreApplication::processEvents();
+    ui.progressBar->setValue(65);
+    ui.lblStatusBar->setText("Zakonczono sortowanie sekwencyjne dla Float");
+
+    std::vector<float> arr_multi = original_arr;
+    m_quickSortManager.sortParallel(arr_multi, time_Multi_Float);
+    ui.lblFloatMultiQuick->setText(QString::number(time_Multi_Float) + " ms");
+    QCoreApplication::processEvents();
+    ui.progressBar->setValue(75);
+    ui.lblStatusBar->setText("Zakonczono sortowanie wielow¹tkowe dla Float");
+
+    std::vector<float> arr_cuda = original_arr;
+    m_quickSortManager.cudaSort(arr_cuda, time_Cuda_Float);
+    ui.lblFloatCUDAQuick->setText(QString::number(time_Cuda_Float) + " ms");
+    QCoreApplication::processEvents();
+    ui.progressBar->setValue(85);
+    ui.lblStatusBar->setText("Zakonczono sortowanie CUDA dla Float");
+
+    std::vector<float> arr_omp = original_arr;
+    m_quickSortManager.sortWithOpenMP(arr_omp, time_omp);
+    ui.lblFloatOMPQuick->setText(QString::number(time_omp) + " ms");
+    QCoreApplication::processEvents();
+    ui.progressBar->setValue(90);
+    ui.lblStatusBar->setText("Zakonczono sortowanie OpenMP dla Float");
+
+    out << elements << ",Float,"
+        << QString::number(time_Seq_Float, 'f', 4) << ","
+        << QString::number(time_Multi_Float, 'f', 4) << ","
+        << QString::number(time_Cuda_Float, 'f', 4) << ","
+        << QString::number(time_omp, 'f', 4) << "\n";
+
+    fillTable(ui.quickTableFloatSeq, arr_seq);
+    fillTable(ui.quickTableFloatMulti, arr_multi);
+    fillTable(ui.quickTableFloatCUDA, arr_cuda);
+    fillTable(ui.quickTableFloatOMP, arr_omp);
+}
+
 void SuperComputing::onBubbleSortButtonClicked() {
     int elements = ui.leElementsBubble->text().toInt();
 	ui.progressBar->setValue(0);
@@ -339,10 +447,82 @@ void SuperComputing::onMergeSortButtonClicked() {
     ui.lblStatusBar->setText("Koniec - Kolejka pusta");
 }
 
+void SuperComputing::onQuickSortButtonClicked() {
+    int elements = ui.leElementsQuickSort_4->text().toInt();
+    ui.progressBar->setValue(0);
+
+    QFile csvFile(Config::Files::QUICK_SORT_CSV);
+    bool isNewFile = !csvFile.exists();
+
+    if (!csvFile.open(QIODevice::Append | QIODevice::Text)) {
+        qDebug() << "Nie udalo sie otworzyc pliku CSV do zapisu!";
+        return;
+    }
+
+    QTextStream out(&csvFile);
+
+    if (isNewFile) {
+        out << "Ilosc_elementow,Typ_danych,Sekwencyjnie(ms),Wielowatkowo(ms),CUDA(ms),OpenMP(ms)\n";
+    }
+
+    if (ui.chbIntQuickSort->isChecked()) {
+        sortIntQuick(elements, out);
+    }
+
+    if (ui.chkFloatQuickSort->isChecked()) {
+        sortFloatQuick(elements, out);
+    }
+
+    ui.progressBar->setValue(98);
+    ui.lblStatusBar->setText("Zakonczono sortowania");
+
+    csvFile.close();
+
+    QProcess* process = new QProcess(this);
+    QStringList arguments;
+    arguments << "SortChartGenerator.py"
+        << Config::Files::QUICK_SORT_CSV
+        << Config::Images::QUICK_CHART
+        << Config::SortingAlgorithms::QUICK;
+
+    process->start("python", arguments);
+    process->waitForFinished();
+
+    ui.lblStatusBar->setText("Generuje wykres");
+    loadImage(Config::Images::QUICK_CHART, ui.quickChart);
+    ui.progressBar->setValue(100);
+    ui.lblStatusBar->setText("Koniec - Kolejka pusta");
+}
+
 void SuperComputing::onRefreshChartsButtonClicked()
 {
     loadImage(Config::Images::BUBBLE_CHART, ui.bubbleChart);
     loadImage(Config::Images::MERGE_CHART, ui.mergeSortChart);
+}
+
+void SuperComputing::onGenerateReportButtonClicked()
+{
+	QProcess* process = new QProcess(this);
+    QStringList arguments;
+    arguments << "SortReportGenerator.py"
+        << Config::Files::BUBBLE_SORT_CSV
+        << Config::Files::MERGE_SORT_CSV
+        << Config::Files::QUICK_SORT_CSV
+        << Config::Files::REPORT_PDF;
+    process->start("python", arguments);
+
+    if (process->waitForFinished(30000)) {
+        ui.lblStatusBar->setText("Pomyœlnie wygenerowano Raport_Wydajnosci.pdf!");
+		QMessageBox::information(this, "Raport wygenerowany", "Raport_Wydajnosci.pdf zosta³ pomyœlnie wygenerowany.");
+
+        QString desktopPath = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
+        QString fullPath = desktopPath + "/" + Config::Files::REPORT_PDF;
+        QDesktopServices::openUrl(QUrl::fromLocalFile(fullPath));
+    }
+    else {
+        ui.lblStatusBar->setText("B³¹d generowania raportu: Przekroczono czas.");
+		QMessageBox::critical(this, "B³¹d", "Wyst¹pi³ b³¹d podczas generowania raportu. Proszê spróbowaæ ponownie.");
+    }
 }
 
 template<typename T>
@@ -370,10 +550,12 @@ void SuperComputing::changeEvent(QEvent* event)
         if (this->isMaximized() && !(stateEvent->oldState() & Qt::WindowMaximized)) {
             loadImage(Config::Images::BUBBLE_CHART, ui.bubbleChart);
             loadImage(Config::Images::MERGE_CHART, ui.mergeSortChart);
+            loadImage(Config::Images::QUICK_CHART, ui.quickChart);
         }
         else if (!this->isMaximized() && (stateEvent->oldState() & Qt::WindowMaximized)) {
             loadImage(Config::Images::BUBBLE_CHART, ui.bubbleChart);
             loadImage(Config::Images::MERGE_CHART, ui.mergeSortChart);
+            loadImage(Config::Images::QUICK_CHART, ui.quickChart);
         }
         QMainWindow::changeEvent(event);
     }

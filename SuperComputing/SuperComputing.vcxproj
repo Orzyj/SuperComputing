@@ -69,11 +69,17 @@
     <ClCompile>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
+    <CudaCompile>
+      <GenerateRelocatableDeviceCode>true</GenerateRelocatableDeviceCode>
+    </CudaCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
+    <CudaCompile>
+      <GenerateRelocatableDeviceCode>true</GenerateRelocatableDeviceCode>
+    </CudaCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
     <ClCompile>
@@ -109,6 +115,7 @@
     <QtMoc Include="SuperComputing.h" />
     <ClCompile Include="BubbleSortManager.cpp" />
     <ClCompile Include="MergeSortManager.cpp" />
+    <ClCompile Include="QuickSortManager.cpp" />
     <ClCompile Include="SuperComputing.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -118,11 +125,13 @@
     </CudaCompile>
     <None Include="SortChartGenerator.py" />
     <None Include="cuda.cuh" />
+    <None Include="SortReportGenerator.py" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BubbleSortManager.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="MergeSortManager.h" />
+    <ClInclude Include="QuickSortManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

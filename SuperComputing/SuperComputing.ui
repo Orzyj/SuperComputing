@@ -990,7 +990,7 @@
          </widget>
         </item>
         <item row="2" column="0" colspan="2">
-         <widget class="QFrame" name="mergeQuickChart">
+         <widget class="QFrame" name="quickChart">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
             <horstretch>0</horstretch>

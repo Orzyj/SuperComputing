@@ -6,6 +6,7 @@
 #include "ui_SuperComputing.h"
 #include "BubbleSortManager.h"
 #include "MergeSortManager.h"
+#include "QuickSortManager.h"
 
 class SuperComputing : public QMainWindow
 {
@@ -17,8 +18,11 @@ public:
 
 private:
     Ui::SuperComputingClass ui;
+
 	BubbleSortManager m_bubbleSortManager;
 	MergeSortManager m_mergeSortManager;
+	QuickSortManager m_quickSortManager;
+
 
 	void loadImage(const QString& imagePath, QFrame* frame);
 
@@ -27,6 +31,9 @@ private:
 
     void sortIntMerge(const int& elements, QTextStream& out);
     void sortFloatMerg(const int& elements, QTextStream& out);
+
+    void sortIntQuick(const int& elements, QTextStream& out);
+    void sortFloatQuick(const int& elements, QTextStream& out);
     
     template <typename T>
     void fillTable(QTableWidget* table, const std::vector<T>& data);
@@ -34,9 +41,12 @@ private:
 private slots:
     void onBubbleSortButtonClicked();
 	void onMergeSortButtonClicked();
+    void onQuickSortButtonClicked();
 	void onRefreshChartsButtonClicked();
+    void onGenerateReportButtonClicked();
 
 protected:
 	void changeEvent(QEvent* event) override;
+
 
 };
