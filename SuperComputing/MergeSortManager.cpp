@@ -53,7 +53,7 @@ void mergeSortOmpHelper(std::vector<T>& arr, int left, int right) {
 }
 
 template<typename T>
-void MergeSortManager::sort(std::vector<T>& arr, double& time) {
+void MergeSortManager<T>::sort(std::vector<T>& arr, double& time) {
     if (arr.empty()) { time = 0.0; return; }
 
     auto start = std::chrono::high_resolution_clock::now();
@@ -65,7 +65,7 @@ void MergeSortManager::sort(std::vector<T>& arr, double& time) {
 }
 
 template<typename T>
-void MergeSortManager::sortParallel(std::vector<T>& arr, double& time) {
+void MergeSortManager<T>::sortParallel(std::vector<T>& arr, double& time) {
     if (arr.empty()) { time = 0.0; return; }
 
     auto start = std::chrono::high_resolution_clock::now();
@@ -80,7 +80,7 @@ void MergeSortManager::sortParallel(std::vector<T>& arr, double& time) {
 }
 
 template<typename T>
-void MergeSortManager::sortWithOpenMP(std::vector<T>& arr, double& time) {
+void MergeSortManager<T>::sortWithOpenMP(std::vector<T>& arr, double& time) {
     if (arr.empty()) { time = 0.0; return; }
 
     auto start = std::chrono::high_resolution_clock::now();
@@ -98,7 +98,7 @@ void MergeSortManager::sortWithOpenMP(std::vector<T>& arr, double& time) {
 }
 
 template<typename T>
-void MergeSortManager::cudaSort(std::vector<T>& arr, double& time) {
+void MergeSortManager<T>::cudaSort(std::vector<T>& arr, double& time) {
     int n = arr.size();
 
     if (n == 0) { 
@@ -117,14 +117,5 @@ void MergeSortManager::cudaSort(std::vector<T>& arr, double& time) {
     cudaFree(d_arr);
 }
 
-template void MergeSortManager::sort<int>(std::vector<int>&, double&);
-template void MergeSortManager::sort<float>(std::vector<float>&, double&);
-
-template void MergeSortManager::sortParallel<int>(std::vector<int>&, double&);
-template void MergeSortManager::sortParallel<float>(std::vector<float>&, double&);
-
-template void MergeSortManager::cudaSort<int>(std::vector<int>&, double&);
-template void MergeSortManager::cudaSort<float>(std::vector<float>&, double&);
-
-template void MergeSortManager::sortWithOpenMP<int>(std::vector<int>&, double&);
-template void MergeSortManager::sortWithOpenMP<float>(std::vector<float>&, double&);
+template class MergeSortManager<int>;
+template class MergeSortManager<float>;

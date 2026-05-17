@@ -64,300 +64,12 @@ void SuperComputing::loadImage(const QString& imagePath, QFrame* frame)
     }
 }
 
-void SuperComputing::sortIntBubble(const int& elements, QTextStream& out)
-{
-    std::vector<int> original_arr(elements);
-    for (int i = 0; i < elements; ++i)
-        original_arr[i] = rand() % 1000;
-
-    double time_Seq_Int = 0.0, time_Multi_Int = 0.0, time_Cuda_Int = 0.0, time_omp = 0.0;
-
-    std::vector<int> arr_seq = original_arr;
-    m_bubbleSortManager.sort(arr_seq, time_Seq_Int);
-    ui.lblintSeq->setText(QString::number(time_Seq_Int) + " ms");
-    QCoreApplication::processEvents();
-    ui.progressBar->setValue(15);
-    ui.lblStatusBar->setText("Zakonczono sortowanie sekwencyjne dla Integer");
-
-    std::vector<int> arr_multi = original_arr;
-    m_bubbleSortManager.sortParallel(arr_multi, time_Multi_Int);
-    ui.lblIntMulti->setText(QString::number(time_Multi_Int) + " ms");
-    QCoreApplication::processEvents();
-    ui.progressBar->setValue(30);
-    ui.lblStatusBar->setText("Zakonczono sortowanie wielow¹tkowe dla Integer");
-
-    std::vector<int> arr_cuda = original_arr;
-    m_bubbleSortManager.cudaSort(arr_cuda, time_Cuda_Int);
-    ui.lblIntCuda->setText(QString::number(time_Cuda_Int) + " ms");
-    QCoreApplication::processEvents();
-    ui.progressBar->setValue(40);
-    ui.lblStatusBar->setText("Zakonczono sortowanie CUDA dla Integer");
-
-    std::vector<int> arr_omp = original_arr;
-    m_bubbleSortManager.sortWithOpenMP(arr_omp, time_omp);
-    ui.lblIntOMP->setText(QString::number(time_omp) + " ms");
-    QCoreApplication::processEvents();
-    ui.progressBar->setValue(55);
-    ui.lblStatusBar->setText("Zakonczono sortowanie OpenMP dla Integer");
-
-    out << elements << ",Integer,"
-        << QString::number(time_Seq_Int, 'f', 4) << ","
-        << QString::number(time_Multi_Int, 'f', 4) << ","
-        << QString::number(time_Cuda_Int, 'f', 4) << ","
-        << QString::number(time_omp, 'f', 4) << "\n";
-
-    fillTable(ui.bubbleTableIntSeq, arr_seq);
-    fillTable(ui.bubbleTableIntMulti, arr_multi);
-    fillTable(ui.bubbleTableIntCuda, arr_cuda);
-    fillTable(ui.bubbleTableIntOMP, arr_omp);
-}
-
-void SuperComputing::sortFloatBubble(const int& elements, QTextStream& out)
-{
-    std::vector<float> original_arr(elements);
-    for (int i = 0; i < elements; ++i)
-        original_arr[i] = static_cast<float>(rand()) / RAND_MAX * 1000.0f;
-
-    double time_Seq_Float = 0.0, time_Multi_Float = 0.0, time_Cuda_Float = 0.0, time_omp = 0.0;
-
-    std::vector<float> arr_seq = original_arr;
-    m_bubbleSortManager.sort(arr_seq, time_Seq_Float);
-    ui.lblFloatSeq->setText(QString::number(time_Seq_Float) + " ms");
-    QCoreApplication::processEvents();
-    ui.progressBar->setValue(65);
-    ui.lblStatusBar->setText("Zakonczono sortowanie sekwencyjne dla Float");
-
-    std::vector<float> arr_multi = original_arr;
-    m_bubbleSortManager.sortParallel(arr_multi, time_Multi_Float);
-    ui.lblFloatMulti->setText(QString::number(time_Multi_Float) + " ms");
-    QCoreApplication::processEvents();
-    ui.progressBar->setValue(75);
-    ui.lblStatusBar->setText("Zakonczono sortowanie wielow¹tkowe dla Float");
-
-    std::vector<float> arr_cuda = original_arr;
-    m_bubbleSortManager.cudaSort(arr_cuda, time_Cuda_Float);
-    ui.lblFloatCuda->setText(QString::number(time_Cuda_Float) + " ms");
-    QCoreApplication::processEvents();
-    ui.progressBar->setValue(85);
-    ui.lblStatusBar->setText("Zakonczono sortowanie CUDA dla Float");
-
-    std::vector<float> arr_omp = original_arr;
-    m_bubbleSortManager.sortWithOpenMP(arr_omp, time_omp);
-    ui.lblFloatOmp->setText(QString::number(time_omp) + " ms");
-    QCoreApplication::processEvents();
-    ui.progressBar->setValue(90);
-    ui.lblStatusBar->setText("Zakonczono sortowanie OpenMP dla Float");
-
-    out << elements << ",Float,"
-        << QString::number(time_Seq_Float, 'f', 4) << ","
-        << QString::number(time_Multi_Float, 'f', 4) << ","
-        << QString::number(time_Cuda_Float, 'f', 4) << ","
-        << QString::number(time_omp, 'f', 4) << "\n";
-
-    fillTable(ui.bubbleTableFloatSeq, arr_seq);
-    fillTable(ui.bubbleTableFloatMulti, arr_multi);
-    fillTable(ui.bubbleTableFloatCuda, arr_cuda);
-    fillTable(ui.bubbleTableFloatOMP, arr_omp);
-}
-
-void SuperComputing::sortIntMerge(const int& elements, QTextStream& out)
-{
-    std::vector<int> original_arr(elements);
-    for (int i = 0; i < elements; ++i)
-        original_arr[i] = rand() % 1000;
-
-    double time_Seq_Int = 0.0, time_Multi_Int = 0.0, time_Cuda_Int = 0.0, time_omp = 0.0;
-
-    std::vector<int> arr_seq = original_arr;
-    m_mergeSortManager.sort(arr_seq, time_Seq_Int);
-    ui.lblIntSeqMerge->setText(QString::number(time_Seq_Int) + " ms");
-    QCoreApplication::processEvents();
-    ui.progressBar->setValue(15);
-    ui.lblStatusBar->setText("Zakonczono sortowanie sekwencyjne dla Integer");
-
-    std::vector<int> arr_multi = original_arr;
-    m_mergeSortManager.sortParallel(arr_multi, time_Multi_Int);
-    ui.lblIntMultiMerge->setText(QString::number(time_Multi_Int) + " ms");
-    QCoreApplication::processEvents();
-    ui.progressBar->setValue(30);
-    ui.lblStatusBar->setText("Zakonczono sortowanie wielow¹tkowe dla Integer");
-
-    std::vector<int> arr_cuda = original_arr;
-    m_mergeSortManager.cudaSort(arr_cuda, time_Cuda_Int);
-    ui.lblIntCUDAMerge->setText(QString::number(time_Cuda_Int) + " ms");
-    QCoreApplication::processEvents();
-    ui.progressBar->setValue(40);
-    ui.lblStatusBar->setText("Zakonczono sortowanie CUDA dla Integer");
-
-    std::vector<int> arr_omp = original_arr;
-    m_mergeSortManager.sortWithOpenMP(arr_omp, time_omp);
-    ui.lblIntOMPMerge->setText(QString::number(time_omp) + " ms");
-    QCoreApplication::processEvents();
-    ui.progressBar->setValue(55);
-    ui.lblStatusBar->setText("Zakonczono sortowanie OpenMP dla Integer");
-
-    out << elements << ",Integer,"
-        << QString::number(time_Seq_Int, 'f', 4) << ","
-        << QString::number(time_Multi_Int, 'f', 4) << ","
-        << QString::number(time_Cuda_Int, 'f', 4) << ","
-        << QString::number(time_omp, 'f', 4) << "\n";
-
-    fillTable(ui.mergeTableIntSeq, arr_seq);
-    fillTable(ui.mergeTableIntMulti, arr_multi);
-    fillTable(ui.mergeTableIntCUDA, arr_cuda);
-    fillTable(ui.mergeTableIntOMP, arr_omp);
-}
-
-void SuperComputing::sortFloatMerg(const int& elements, QTextStream& out)
-{
-    std::vector<float> original_arr(elements);
-    for (int i = 0; i < elements; ++i)
-        original_arr[i] = static_cast<float>(rand()) / RAND_MAX * 1000.0f;
-
-    double time_Seq_Float = 0.0, time_Multi_Float = 0.0, time_Cuda_Float = 0.0, time_omp = 0.0;
-
-    std::vector<float> arr_seq = original_arr;
-    m_mergeSortManager.sort(arr_seq, time_Seq_Float);
-    ui.lblFloatSeqMerge->setText(QString::number(time_Seq_Float) + " ms");
-    QCoreApplication::processEvents();
-    ui.progressBar->setValue(65);
-    ui.lblStatusBar->setText("Zakonczono sortowanie sekwencyjne dla Float");
-
-    std::vector<float> arr_multi = original_arr;
-    m_mergeSortManager.sortParallel(arr_multi, time_Multi_Float);
-    ui.lblFloatMultiMerge->setText(QString::number(time_Multi_Float) + " ms");
-    QCoreApplication::processEvents();
-    ui.progressBar->setValue(75);
-    ui.lblStatusBar->setText("Zakonczono sortowanie wielow¹tkowe dla Float");
-
-    std::vector<float> arr_cuda = original_arr;
-    m_mergeSortManager.cudaSort(arr_cuda, time_Cuda_Float);
-    ui.lblFloatCUDAMerge->setText(QString::number(time_Cuda_Float) + " ms");
-    QCoreApplication::processEvents();
-    ui.progressBar->setValue(85);
-    ui.lblStatusBar->setText("Zakonczono sortowanie CUDA dla Float");
-
-    std::vector<float> arr_omp = original_arr;
-    m_mergeSortManager.sortWithOpenMP(arr_omp, time_omp);
-    ui.lblFloatOMPMerge->setText(QString::number(time_omp) + " ms");
-    QCoreApplication::processEvents();
-    ui.progressBar->setValue(90);
-    ui.lblStatusBar->setText("Zakonczono sortowanie OpenMP dla Float");
-
-    out << elements << ",Float,"
-        << QString::number(time_Seq_Float, 'f', 4) << ","
-        << QString::number(time_Multi_Float, 'f', 4) << ","
-        << QString::number(time_Cuda_Float, 'f', 4) << ","
-        << QString::number(time_omp, 'f', 4) << "\n";
-
-    fillTable(ui.mergeTableFloatSeq, arr_seq);
-    fillTable(ui.mergeTableFloatMulti, arr_multi);
-    fillTable(ui.mergeTableFloatCUDA, arr_cuda);
-    fillTable(ui.mergeTableFloatOMP, arr_omp);
-}
-
-void SuperComputing::sortIntQuick(const int& elements, QTextStream& out)
-{
-    std::vector<int> original_arr(elements);
-    for (int i = 0; i < elements; ++i)
-        original_arr[i] = rand() % 1000;
-
-    double time_Seq_Int = 0.0, time_Multi_Int = 0.0, time_Cuda_Int = 0.0, time_omp = 0.0;
-
-    std::vector<int> arr_seq = original_arr;
-    m_quickSortManager.sort(arr_seq, time_Seq_Int);
-    ui.lblIntSeqQuick->setText(QString::number(time_Seq_Int) + " ms");
-    QCoreApplication::processEvents();
-    ui.progressBar->setValue(15);
-    ui.lblStatusBar->setText("Zakonczono sortowanie sekwencyjne dla Integer");
-
-    std::vector<int> arr_multi = original_arr;
-    m_quickSortManager.sortParallel(arr_multi, time_Multi_Int);
-    ui.lblIntMultiQuick->setText(QString::number(time_Multi_Int) + " ms");
-    QCoreApplication::processEvents();
-    ui.progressBar->setValue(30);
-    ui.lblStatusBar->setText("Zakonczono sortowanie wielow¹tkowe dla Integer");
-
-    std::vector<int> arr_cuda = original_arr;
-    m_quickSortManager.cudaSort(arr_cuda, time_Cuda_Int);
-    ui.lblIntCUDAQuick->setText(QString::number(time_Cuda_Int) + " ms");
-    QCoreApplication::processEvents();
-    ui.progressBar->setValue(40);
-    ui.lblStatusBar->setText("Zakonczono sortowanie CUDA dla Integer");
-
-    std::vector<int> arr_omp = original_arr;
-    m_quickSortManager.sortWithOpenMP(arr_omp, time_omp);
-    ui.lblIntOMPQuick->setText(QString::number(time_omp) + " ms");
-    QCoreApplication::processEvents();
-    ui.progressBar->setValue(55);
-    ui.lblStatusBar->setText("Zakonczono sortowanie OpenMP dla Integer");
-
-    out << elements << ",Integer,"
-        << QString::number(time_Seq_Int, 'f', 4) << ","
-        << QString::number(time_Multi_Int, 'f', 4) << ","
-        << QString::number(time_Cuda_Int, 'f', 4) << ","
-        << QString::number(time_omp, 'f', 4) << "\n";
-
-    fillTable(ui.quickTableIntSeq, arr_seq);
-    fillTable(ui.quickTableIntMulti, arr_multi);
-    fillTable(ui.quickTableIntCUDA, arr_cuda);
-    fillTable(ui.quickTableIntOMP, arr_omp);
-}
-
-void SuperComputing::sortFloatQuick(const int& elements, QTextStream& out)
-{
-    std::vector<float> original_arr(elements);
-    for (int i = 0; i < elements; ++i)
-        original_arr[i] = static_cast<float>(rand()) / RAND_MAX * 1000.0f;
-
-    double time_Seq_Float = 0.0, time_Multi_Float = 0.0, time_Cuda_Float = 0.0, time_omp = 0.0;
-
-    std::vector<float> arr_seq = original_arr;
-    m_quickSortManager.sort(arr_seq, time_Seq_Float);
-    ui.lblFloatSeqQuick->setText(QString::number(time_Seq_Float) + " ms");
-    QCoreApplication::processEvents();
-    ui.progressBar->setValue(65);
-    ui.lblStatusBar->setText("Zakonczono sortowanie sekwencyjne dla Float");
-
-    std::vector<float> arr_multi = original_arr;
-    m_quickSortManager.sortParallel(arr_multi, time_Multi_Float);
-    ui.lblFloatMultiQuick->setText(QString::number(time_Multi_Float) + " ms");
-    QCoreApplication::processEvents();
-    ui.progressBar->setValue(75);
-    ui.lblStatusBar->setText("Zakonczono sortowanie wielow¹tkowe dla Float");
-
-    std::vector<float> arr_cuda = original_arr;
-    m_quickSortManager.cudaSort(arr_cuda, time_Cuda_Float);
-    ui.lblFloatCUDAQuick->setText(QString::number(time_Cuda_Float) + " ms");
-    QCoreApplication::processEvents();
-    ui.progressBar->setValue(85);
-    ui.lblStatusBar->setText("Zakonczono sortowanie CUDA dla Float");
-
-    std::vector<float> arr_omp = original_arr;
-    m_quickSortManager.sortWithOpenMP(arr_omp, time_omp);
-    ui.lblFloatOMPQuick->setText(QString::number(time_omp) + " ms");
-    QCoreApplication::processEvents();
-    ui.progressBar->setValue(90);
-    ui.lblStatusBar->setText("Zakonczono sortowanie OpenMP dla Float");
-
-    out << elements << ",Float,"
-        << QString::number(time_Seq_Float, 'f', 4) << ","
-        << QString::number(time_Multi_Float, 'f', 4) << ","
-        << QString::number(time_Cuda_Float, 'f', 4) << ","
-        << QString::number(time_omp, 'f', 4) << "\n";
-
-    fillTable(ui.quickTableFloatSeq, arr_seq);
-    fillTable(ui.quickTableFloatMulti, arr_multi);
-    fillTable(ui.quickTableFloatCUDA, arr_cuda);
-    fillTable(ui.quickTableFloatOMP, arr_omp);
-}
-
 void SuperComputing::onBubbleSortButtonClicked() {
     int elements = ui.leElementsBubble->text().toInt();
-	ui.progressBar->setValue(0);
+    ui.progressBar->setValue(0);
 
     QFile csvFile(Config::Files::BUBBLE_SORT_CSV);
-    bool isNewFile = !csvFile.exists(); 
+    bool isNewFile = !csvFile.exists();
 
     if (!csvFile.open(QIODevice::Append | QIODevice::Text)) {
         qDebug() << "Nie udalo sie otworzyc pliku CSV do zapisu!";
@@ -371,11 +83,17 @@ void SuperComputing::onBubbleSortButtonClicked() {
     }
 
     if (ui.chbIntBubble->isChecked()) {
-        sortIntBubble(elements, out);
+        BubbleSortManager<int> managerInt;
+        executeBenchmark<int>(managerInt, elements, out, "Integer",
+            ui.lblintSeq, ui.lblIntMulti, ui.lblIntCuda, ui.lblIntOMP,
+            ui.bubbleTableIntSeq, ui.bubbleTableIntMulti, ui.bubbleTableIntCuda, ui.bubbleTableIntOMP);
     }
 
     if (ui.chklFloatBubble->isChecked()) {
-        sortFloatBubble(elements, out);
+        BubbleSortManager<float> managerFloat;
+        executeBenchmark<float>(managerFloat, elements, out, "Float",
+            ui.lblFloatSeq, ui.lblFloatMulti, ui.lblFloatCuda, ui.lblFloatOmp,
+            ui.bubbleTableFloatSeq, ui.bubbleTableFloatMulti, ui.bubbleTableFloatCuda, ui.bubbleTableFloatOMP);
     }
 
     ui.progressBar->setValue(98);
@@ -383,21 +101,20 @@ void SuperComputing::onBubbleSortButtonClicked() {
 
     csvFile.close();
 
-	QProcess* process = new QProcess(this);
+    QProcess* process = new QProcess(this);
     QStringList arguments;
     arguments << "SortChartGenerator.py"
         << Config::Files::BUBBLE_SORT_CSV
         << Config::Images::BUBBLE_CHART
-		<< Config::SortingAlgorithms::BUBBLE;
+        << Config::SortingAlgorithms::BUBBLE;
 
-	process->start("python", arguments);
+    process->start("python", arguments);
     process->waitForFinished();
 
     ui.lblStatusBar->setText("Generuje wykres");
     loadImage(Config::Images::BUBBLE_CHART, ui.bubbleChart);
     ui.progressBar->setValue(100);
     ui.lblStatusBar->setText("Koniec - Kolejka pusta");
-    
 }
 
 void SuperComputing::onMergeSortButtonClicked() {
@@ -419,11 +136,17 @@ void SuperComputing::onMergeSortButtonClicked() {
     }
 
     if (ui.chbIntMergeSort->isChecked()) {
-        sortIntMerge(elements, out);
+        MergeSortManager<int> managerInt;
+        executeBenchmark<int>(managerInt, elements, out, "Integer",
+            ui.lblIntSeqMerge, ui.lblIntMultiMerge, ui.lblIntCUDAMerge, ui.lblIntOMPMerge,
+            ui.mergeTableIntSeq, ui.mergeTableIntMulti, ui.mergeTableIntCUDA, ui.mergeTableIntOMP);
     }
 
     if (ui.chkFloatMergeSort->isChecked()) {
-        sortFloatMerg(elements, out);
+        MergeSortManager<float> managerFloat;
+        executeBenchmark<float>(managerFloat, elements, out, "Float",
+            ui.lblFloatSeqMerge, ui.lblFloatMultiMerge, ui.lblFloatCUDAMerge, ui.lblFloatOMPMerge,
+            ui.mergeTableFloatSeq, ui.mergeTableFloatMulti, ui.mergeTableFloatCUDA, ui.mergeTableFloatOMP);
     }
 
     ui.progressBar->setValue(98);
@@ -436,7 +159,7 @@ void SuperComputing::onMergeSortButtonClicked() {
     arguments << "SortChartGenerator.py"
         << Config::Files::MERGE_SORT_CSV
         << Config::Images::MERGE_CHART
-		<< Config::SortingAlgorithms::MERGE;
+        << Config::SortingAlgorithms::MERGE;
 
     process->start("python", arguments);
     process->waitForFinished();
@@ -466,11 +189,17 @@ void SuperComputing::onQuickSortButtonClicked() {
     }
 
     if (ui.chbIntQuickSort->isChecked()) {
-        sortIntQuick(elements, out);
+        QuickSortManager<int> managerInt;
+        executeBenchmark<int>(managerInt, elements, out, "Integer",
+            ui.lblIntSeqQuick, ui.lblIntMultiQuick, ui.lblIntCUDAQuick, ui.lblIntOMPQuick,
+            ui.quickTableIntSeq, ui.quickTableIntMulti, ui.quickTableIntCUDA, ui.quickTableIntOMP);
     }
 
     if (ui.chkFloatQuickSort->isChecked()) {
-        sortFloatQuick(elements, out);
+        QuickSortManager<float> managerFloat;
+        executeBenchmark<float>(managerFloat, elements, out, "Float",
+            ui.lblFloatSeqQuick, ui.lblFloatMultiQuick, ui.lblFloatCUDAQuick, ui.lblFloatOMPQuick,
+            ui.quickTableFloatSeq, ui.quickTableFloatMulti, ui.quickTableFloatCUDA, ui.quickTableFloatOMP);
     }
 
     ui.progressBar->setValue(98);
@@ -498,6 +227,7 @@ void SuperComputing::onRefreshChartsButtonClicked()
 {
     loadImage(Config::Images::BUBBLE_CHART, ui.bubbleChart);
     loadImage(Config::Images::MERGE_CHART, ui.mergeSortChart);
+	loadImage(Config::Images::QUICK_CHART, ui.quickChart);
 }
 
 void SuperComputing::onGenerateReportButtonClicked()
@@ -523,6 +253,71 @@ void SuperComputing::onGenerateReportButtonClicked()
         ui.lblStatusBar->setText("B³¹d generowania raportu: Przekroczono czas.");
 		QMessageBox::critical(this, "B³¹d", "Wyst¹pi³ b³¹d podczas generowania raportu. Proszê spróbowaæ ponownie.");
     }
+}
+
+template<typename T>
+std::vector<T> SuperComputing::generateRandomData(int elements)
+{
+    std::vector<T> arr(elements);
+    for (int i = 0; i < elements; ++i) {
+        if constexpr (std::is_same_v<T, int>) {
+            arr[i] = rand() % 1000;
+        }
+        else if constexpr (std::is_same_v<T, float>) {
+            arr[i] = static_cast<float>(rand()) / RAND_MAX * 1000.0f;
+        }
+    }
+    return arr;
+}
+
+template<typename T>
+void SuperComputing::executeBenchmark(ISortManager<T>& manager, int elements, QTextStream& out, const QString& typeName, QLabel* lblSeq, QLabel* lblMulti, QLabel* lblCuda, QLabel* lblOmp, QTableWidget* tblSeq, QTableWidget* tblMulti, QTableWidget* tblCuda, QTableWidget* tblOmp)
+{
+    std::vector<T> original_arr = generateRandomData<T>(elements);
+    double t_seq = 0.0, t_multi = 0.0, t_cuda = 0.0, t_omp = 0.0;
+
+    // SEQ
+    std::vector<T> arr_seq = original_arr;
+    manager.sort(arr_seq, t_seq);
+    lblSeq->setText(QString::number(t_seq) + " ms");
+    QCoreApplication::processEvents();
+    ui.progressBar->setValue(15);
+    ui.lblStatusBar->setText("Zakonczono sortowanie sekwencyjne dla " + typeName);
+
+    // MULTITHREAD
+    std::vector<T> arr_multi = original_arr;
+    manager.sortParallel(arr_multi, t_multi);
+    lblMulti->setText(QString::number(t_multi) + " ms");
+    QCoreApplication::processEvents();
+    ui.progressBar->setValue(30);
+    ui.lblStatusBar->setText("Zakonczono sortowanie wielow¹tkowe dla " + typeName);
+
+    // CUDA
+    std::vector<T> arr_cuda = original_arr;
+    manager.cudaSort(arr_cuda, t_cuda);
+    lblCuda->setText(QString::number(t_cuda) + " ms");
+    QCoreApplication::processEvents();
+    ui.progressBar->setValue(40);
+    ui.lblStatusBar->setText("Zakonczono sortowanie CUDA dla " + typeName);
+
+    // OpenMP
+    std::vector<T> arr_omp = original_arr;
+    manager.sortWithOpenMP(arr_omp, t_omp);
+    lblOmp->setText(QString::number(t_omp) + " ms");
+    QCoreApplication::processEvents();
+    ui.progressBar->setValue(55);
+    ui.lblStatusBar->setText("Zakonczono sortowanie OpenMP dla " + typeName);
+
+    out << elements << "," << typeName << ","
+        << QString::number(t_seq, 'f', 4) << ","
+        << QString::number(t_multi, 'f', 4) << ","
+        << QString::number(t_cuda, 'f', 4) << ","
+        << QString::number(t_omp, 'f', 4) << "\n";
+
+    fillTable(tblSeq, arr_seq);
+    fillTable(tblMulti, arr_multi);
+    fillTable(tblCuda, arr_cuda);
+    fillTable(tblOmp, arr_omp);
 }
 
 template<typename T>
@@ -560,3 +355,6 @@ void SuperComputing::changeEvent(QEvent* event)
         QMainWindow::changeEvent(event);
     }
 }
+
+template void SuperComputing::executeBenchmark<int>(ISortManager<int>&, int, QTextStream&, const QString&, QLabel*, QLabel*, QLabel*, QLabel*, QTableWidget*, QTableWidget*, QTableWidget*, QTableWidget*);
+template void SuperComputing::executeBenchmark<float>(ISortManager<float>&, int, QTextStream&, const QString&, QLabel*, QLabel*, QLabel*, QLabel*, QTableWidget*, QTableWidget*, QTableWidget*, QTableWidget*);

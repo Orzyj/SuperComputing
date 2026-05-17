@@ -130,6 +130,7 @@
   <ItemGroup>
     <ClInclude Include="BubbleSortManager.h" />
     <ClInclude Include="Constants.h" />
+    <ClInclude Include="ISortManager.h" />
     <ClInclude Include="MergeSortManager.h" />
     <ClInclude Include="QuickSortManager.h" />
   </ItemGroup>

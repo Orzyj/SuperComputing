@@ -85,5 +85,8 @@
     <ClInclude Include="QuickSortManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ISortManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -68,7 +68,7 @@ void quickSortOmpHelper(std::vector<T>& arr, int low, int high) {
 // --- Implementacja metod klasy ---
 
 template<typename T>
-void QuickSortManager::sort(std::vector<T>& arr, double& time) {
+void QuickSortManager<T>::sort(std::vector<T>& arr, double& time) {
     if (arr.empty()) { time = 0.0; return; }
     auto start = std::chrono::high_resolution_clock::now();
 
@@ -79,7 +79,7 @@ void QuickSortManager::sort(std::vector<T>& arr, double& time) {
 }
 
 template<typename T>
-void QuickSortManager::sortParallel(std::vector<T>& arr, double& time) {
+void QuickSortManager<T>::sortParallel(std::vector<T>& arr, double& time) {
     if (arr.empty()) { time = 0.0; return; }
     auto start = std::chrono::high_resolution_clock::now();
 
@@ -94,7 +94,7 @@ void QuickSortManager::sortParallel(std::vector<T>& arr, double& time) {
 }
 
 template<typename T>
-void QuickSortManager::sortWithOpenMP(std::vector<T>& arr, double& time) {
+void QuickSortManager<T>::sortWithOpenMP(std::vector<T>& arr, double& time) {
     if (arr.empty()) { time = 0.0; return; }
     auto start = std::chrono::high_resolution_clock::now();
 
@@ -111,7 +111,7 @@ void QuickSortManager::sortWithOpenMP(std::vector<T>& arr, double& time) {
 }
 
 template<typename T>
-void QuickSortManager::cudaSort(std::vector<T>& arr, double& time) {
+void QuickSortManager<T>::cudaSort(std::vector<T>& arr, double& time) {
     int n = arr.size();
     if (n <= 1) { time = 0.0; return; }
 
@@ -127,15 +127,5 @@ void QuickSortManager::cudaSort(std::vector<T>& arr, double& time) {
     cudaFree(d_arr);
 }
 
-// --- Eksplicytna konkretyzacja szablonów ---
-template void QuickSortManager::sort<int>(std::vector<int>&, double&);
-template void QuickSortManager::sort<float>(std::vector<float>&, double&);
-
-template void QuickSortManager::sortParallel<int>(std::vector<int>&, double&);
-template void QuickSortManager::sortParallel<float>(std::vector<float>&, double&);
-
-template void QuickSortManager::cudaSort<int>(std::vector<int>&, double&);
-template void QuickSortManager::cudaSort<float>(std::vector<float>&, double&);
-
-template void QuickSortManager::sortWithOpenMP<int>(std::vector<int>&, double&);
-template void QuickSortManager::sortWithOpenMP<float>(std::vector<float>&, double&);
+template class QuickSortManager<int>;
+template class QuickSortManager<float>;

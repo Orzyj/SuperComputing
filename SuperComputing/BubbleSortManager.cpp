@@ -10,7 +10,7 @@
 #include <omp.h>
 
 template<typename T>
-void BubbleSortManager::sortWithOpenMP(std::vector<T>& arr, double& time) {
+void BubbleSortManager<T>::sortWithOpenMP(std::vector<T>& arr, double& time) {
     int n = arr.size();
 
     if (n < 2) {
@@ -20,10 +20,10 @@ void BubbleSortManager::sortWithOpenMP(std::vector<T>& arr, double& time) {
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    #pragma omp parallel
+#pragma omp parallel
     for (int phase = 0; phase < n; ++phase) {
         if (phase % 2 == 0) {
-            #pragma omp for
+#pragma omp for
             for (int i = 0; i < n - 1; i += 2) {
                 if (arr[i] > arr[i + 1]) {
                     std::swap(arr[i], arr[i + 1]);
@@ -31,7 +31,7 @@ void BubbleSortManager::sortWithOpenMP(std::vector<T>& arr, double& time) {
             }
         }
         else {
-            #pragma omp for
+#pragma omp for
             for (int i = 1; i < n - 1; i += 2) {
                 if (arr[i] > arr[i + 1]) {
                     std::swap(arr[i], arr[i + 1]);
@@ -46,7 +46,7 @@ void BubbleSortManager::sortWithOpenMP(std::vector<T>& arr, double& time) {
 }
 
 template<typename T>
-void BubbleSortManager::sort(std::vector<T>& arr, double& time)
+void BubbleSortManager<T>::sort(std::vector<T>& arr, double& time)
 {
     int n = arr.size();
 
@@ -66,7 +66,7 @@ void BubbleSortManager::sort(std::vector<T>& arr, double& time)
 }
 
 template<typename T>
-void BubbleSortManager::sortParallel(std::vector<T>& arr, double& time)
+void BubbleSortManager<T>::sortParallel(std::vector<T>& arr, double& time)
 {
     int n = arr.size();
 
@@ -106,7 +106,7 @@ void BubbleSortManager::sortParallel(std::vector<T>& arr, double& time)
             }
             sync_point.arrive_and_wait();
         }
-    };
+        };
 
     std::vector<std::thread> threads;
     for (unsigned int i = 0; i < numThreads; ++i) {
@@ -125,7 +125,7 @@ void BubbleSortManager::sortParallel(std::vector<T>& arr, double& time)
 }
 
 template<typename T>
-void BubbleSortManager::cudaSort(std::vector<T>& arr, double& time)
+void BubbleSortManager<T>::cudaSort(std::vector<T>& arr, double& time)
 {
     int n = arr.size();
     if (n == 0) {
@@ -143,14 +143,5 @@ void BubbleSortManager::cudaSort(std::vector<T>& arr, double& time)
     cudaFree(d_arr);
 }
 
-template void BubbleSortManager::sort<int>(std::vector<int>&, double&);
-template void BubbleSortManager::sort<float>(std::vector<float>&, double&);
-
-template void BubbleSortManager::sortParallel<int>(std::vector<int>&, double&);
-template void BubbleSortManager::sortParallel<float>(std::vector<float>&, double&);
-
-template void BubbleSortManager::cudaSort<int>(std::vector<int>&, double&);
-template void BubbleSortManager::cudaSort<float>(std::vector<float>&, double&);
-
-template void BubbleSortManager::sortWithOpenMP<int>(std::vector<int>&, double&);
-template void BubbleSortManager::sortWithOpenMP<float>(std::vector<float>&, double&);
+template class BubbleSortManager<int>;
+template class BubbleSortManager<float>;
