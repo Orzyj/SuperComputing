@@ -15,6 +15,18 @@ A desktop application developed within the Qt/C++ ecosystem designed to perform 
 * **OpenMP:** Multi-processing paradigm based on compiler directives for shared-memory systems.
 * **NVIDIA CUDA:** Massively parallel acceleration handled directly on the graphics processing unit (GPU) cores.
 
+## UI 
+<p align="center">
+  <img src="img/bs.png" alt="bubble sort view">
+</p>
+<p align="center">
+  <img src="img/ms.png" alt="merge sort view">
+</p>
+<p align="center">
+  <img src="img/qs.png" alt="quick sort view">
+</p>
+
+
 ## Key Features
 * Asynchronous, non-blocking Graphical User Interface (Qt Widgets).
 * Dynamic rendering and visualization of sorted array slices.
