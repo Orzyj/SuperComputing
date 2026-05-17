@@ -12,6 +12,7 @@
 #include <QDesktopServices>
 #include <QUrl>
 #include <qstandardpaths.h>
+#include <memory>
 
 #include "SuperComputing.h"
 #include "cuda.cuh"
@@ -24,7 +25,13 @@ SuperComputing::SuperComputing(QWidget* parent)
 
     QMenu* reportsMenu = menuBar()->addMenu("Raporty");
     QAction* generateReportAction = reportsMenu->addAction("Generuj raport PDF");
+
+    QMenu* Testy = menuBar()->addMenu("Testy");
+    QAction* clearFilesAction = Testy->addAction("Wyczysc pliki CSV z wynikami");
+    QAction* generateTestReportAction = Testy->addAction("Przeprowadz wszystkie testy");
     
+	QObject::connect(generateTestReportAction, &QAction::triggered, this, &SuperComputing::onRunAllTestsButtonClicked);
+	QObject::connect(clearFilesAction, &QAction::triggered, this, &SuperComputing::onClearFilesActionButtonClicked);
     QObject::connect(generateReportAction, &QAction::triggered, this, &SuperComputing::onGenerateReportButtonClicked);
     QObject::connect(ui.btnBubbleSort, &QPushButton::clicked, this, &SuperComputing::onBubbleSortButtonClicked);
     QObject::connect(ui.btnMergeSort, &QPushButton::clicked, this, &SuperComputing::onMergeSortButtonClicked);
@@ -253,6 +260,62 @@ void SuperComputing::onGenerateReportButtonClicked()
         ui.lblStatusBar->setText("B³¹d generowania raportu: Przekroczono czas.");
 		QMessageBox::critical(this, "B³¹d", "Wyst¹pi³ b³¹d podczas generowania raportu. Proszê spróbowaæ ponownie.");
     }
+}
+
+bool SuperComputing::onClearFilesActionButtonClicked()
+{
+	QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(this, "Potwierdzenie", "Czy na pewno chcesz wyczyscic wszystkie pliki CSV z wynikami? Ta operacja jest nieodwracalna.",
+		QMessageBox::Yes | QMessageBox::No);
+
+    if (reply == QMessageBox::Yes) {
+        QFile::remove(Config::Files::BUBBLE_SORT_CSV);
+        QFile::remove(Config::Files::MERGE_SORT_CSV);
+        QFile::remove(Config::Files::QUICK_SORT_CSV);
+        QFile::remove(Config::Images::BUBBLE_CHART);
+        QFile::remove(Config::Images::MERGE_CHART);
+        QFile::remove(Config::Images::QUICK_CHART);
+
+		onRefreshChartsButtonClicked();
+        return true;
+    }
+
+    return false;
+}
+
+void SuperComputing::onRunAllTestsButtonClicked()
+{
+    if (!onClearFilesActionButtonClicked()) 
+        QMessageBox::information(this, "Uwaga", "Aby testy zostaly przeprowadzone dobrze nalzey wyczyscic plik, [ROLLBACK]");
+    
+    QMessageBox::information(this, "Uwaga", "Zostana przeprowadzone 6 testow, prosze czekac");
+
+    //* Setting env
+    ui.chbIntBubble->setCheckState(Qt::CheckState::Checked);
+    ui.chklFloatBubble->setCheckState(Qt::CheckState::Checked);
+    ui.chbIntMergeSort->setCheckState(Qt::CheckState::Checked);
+    ui.chkFloatMergeSort->setCheckState(Qt::CheckState::Checked);
+    ui.chbIntQuickSort->setCheckState(Qt::CheckState::Checked);
+    ui.chkFloatQuickSort->setCheckState(Qt::CheckState::Checked);
+
+    const int NUMBER_OF_TESTS = 6;
+    const int NUMBER_OF_UNITS[NUMBER_OF_TESTS] = { 100,1000, 5000, 8000, 10000, 20000 };
+
+    for (int i = 0; i < NUMBER_OF_TESTS; i++) {
+        ui.leElementsBubble->setText(QString::number(NUMBER_OF_UNITS[i]));
+		ui.tabs->setCurrentIndex(0);
+        onBubbleSortButtonClicked();
+
+        ui.leElementsMergeSort->setText(QString::number(NUMBER_OF_UNITS[i]));
+        ui.tabs->setCurrentIndex(1);
+        onMergeSortButtonClicked();
+
+        ui.leElementsQuickSort_4->setText(QString::number(NUMBER_OF_UNITS[i]));
+        ui.tabs->setCurrentIndex(2);
+        onQuickSortButtonClicked();
+    }
+
+    onGenerateReportButtonClicked();
 }
 
 template<typename T>

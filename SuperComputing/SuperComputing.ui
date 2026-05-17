@@ -31,7 +31,7 @@
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QTabWidget" name="tabWidget">
+     <widget class="QTabWidget" name="tabs">
       <property name="maximumSize">
        <size>
         <width>16777215</width>
@@ -41,7 +41,7 @@
       <property name="currentIndex">
        <number>2</number>
       </property>
-      <widget class="QWidget" name="tab">
+      <widget class="QWidget" name="bubbleTab">
        <attribute name="title">
         <string>Bubble Sort</string>
        </attribute>
@@ -363,7 +363,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tab_2">
+      <widget class="QWidget" name="mergeTab">
        <attribute name="title">
         <string>Merge Sort</string>
        </attribute>
@@ -691,7 +691,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tab_7">
+      <widget class="QWidget" name="quickTab">
        <attribute name="title">
         <string>Quick Sort</string>
        </attribute>

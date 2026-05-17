@@ -93,6 +93,12 @@ private slots:
     /** @brief Handler for the Generate PDF Report button. */
     void onGenerateReportButtonClicked();
 
+    /** @brief Handler for deleteing files*/
+    bool onClearFilesActionButtonClicked();
+
+    /** @brief Handler for run/generate all tests at one*/
+	void onRunAllTestsButtonClicked();
+
 protected:
     /**
      * @brief Handles window state changes (e.g., maximizing/restoring the window).
